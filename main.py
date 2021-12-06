@@ -12,14 +12,13 @@ import re
 import os
 import sqlite3
 
-API_TOKEN = '5075815121:AAHowhsyJHRxik-AfWsUjXdzITlp6iz_vuc'
 conn = sqlite3.connect('db.db')
 cursor = conn.cursor()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(API_TOKEN)
+bot = Bot(BOT_TOKEN)
 dp = Dispatcher(bot)
 
 
