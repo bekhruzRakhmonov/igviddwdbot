@@ -3,9 +3,7 @@ import logging
 from aiogram import Bot, Dispatcher, executor, types
 
 from aiogram.utils.executor import start_webhook
-from .settings import (BOT_TOKEN,HEROKU_APP_NAME,
-						  WEBHOOK_URL, WEBHOOK_PATH,
-						  WEBAPP_HOST, WEBAPP_PORT)
+from settings import (BOT_TOKEN,HEROKU_APP_NAME,WEBHOOK_URL, WEBHOOK_PATH,WEBAPP_HOST, WEBAPP_PORT)
 
 import requests as r
 import re
