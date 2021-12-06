@@ -1,3 +1,4 @@
+python==3.9.0
 aiogram==2.16
 aiohttp
 aiodns
