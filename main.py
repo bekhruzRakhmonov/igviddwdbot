@@ -1,0 +1,92 @@
+import aiogram
+import logging
+from aiogram import Bot, Dispatcher, executor, types
+
+import requests as r
+import re
+import os
+import sqlite3
+
+API_TOKEN = '5075815121:AAHowhsyJHRxik-AfWsUjXdzITlp6iz_vuc'
+conn = sqlite3.connect('db.db')
+cursor = conn.cursor()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+
+bot = Bot(API_TOKEN)
+dp = Dispatcher(bot)
+
+def is_valid(url):
+	req = r.get(url)
+	if re.match(r"https://www.instagram.com/tv/",url) or re.match(r"https://www.instagram.com/p/",url) and req.status_code == 200:
+		return True
+	else:
+		return False
+
+@dp.message_handler(commands=['hechkimbilmidi'])
+async def send_users_count(message: types.Message):
+	users_count = cursor.execute("SELECT id FROM users")
+	for user in users_count:
+		await bot.send_message(message.from_user.id,user)
+@dp.message_handler(commands=['start'])
+async def start_message(message): 
+	user = cursor.execute("SELECT * FROM users WHERE user_id='{}'".format(message.from_user.id)).fetchone()
+	if user == None:
+		cursor.execute("INSERT INTO users(user_id) VALUES ({})".format(message.from_user.id))
+		conn.commit()
+	await bot.send_message(message.from_user.id,'Send me URL.')
+async def send_video(user,viewers,username,description):
+	await bot.send_video(user.id,open(f'videos/{user.id}.mp4','rb'),caption=f"<b>Username</b>: {username[0]}\n<b>Viewers count</b>: {viewers[0]}\n@igviddwd_bot",parse_mode='HTML')
+	if os.path.exists(f"videos/{user.id}.mp4"):
+		os.remove(f"videos/{user.id}.mp4")
+def prepare_urls(matches):
+	return list({match.replace("\\u0026", "&") for match in matches})
+@dp.message_handler(content_types=['text'])
+async def get_url(message):
+	user = message.from_user
+	if is_valid(message.text):
+		await bot.send_message(user.id,'Sending...')
+		text = r.get(f"{message.text}").text
+		response = re.findall('"video_url":"([^"]+)"',text)
+		username = re.findall('"full_name":"([^"]+)"', text)
+		description = re.findall('"text":"([^"]+)"', text)
+		viewers = re.findall('"video_view_count":([^"]+)',text)
+		vid_urls = prepare_urls(response)
+		data = r.get(f"{vid_urls[0]}")
+		with open(f'videos/{message.from_user.id}.mp4','wb') as f:
+			f.write(data.content)
+		await send_video(user,viewers,username,description)
+	else:
+		await bot.send_message(user.id,'Invalid url.')
+
+@dp.inline_handler()
+async def inline_echo(inline_query: types.InlineQuery):
+	user = inline_query.from_user
+	video_url = inline_query.query.replace("\\","")
+	if is_valid(video_url):
+		await bot.send_message(user.id,'Yuborilmoqda...')
+		text = r.get(f"{inline_query.query}").text
+		response = re.findall('"video_url":"([^"]+)"',text)
+		viewers = re.findall('"video_view_count":([^"]+)',text)
+		vid_urls = prepare_urls(response)
+		input_content = types.InputTextMessageContent(inline_query.query)
+		username = re.findall('"full_name":"([^"]+)"', text)
+		display_url = re.findall('"display_url":"([^"]+)"', text)
+		pic_url = prepare_urls(display_url)
+		description = re.findall('"text":"([^"]+)"', text)
+		modified_description = description[2].replace("\\n","")
+		print(description)
+		item = types.InlineQueryResultVideo(id='1', title=f'{username[0]}',video_url=f'{video_url}',
+											mime_type='video/mp4',thumb_url=f'{pic_url[0]}',caption='it is caption',description=f'{modified_description[:30]}...\nKo\'rishlar soni:{viewers[0]}',
+											  input_message_content=input_content)
+		await bot.answer_inline_query(inline_query.id, results=[item], cache_time=1)
+		data = r.get(f"{vid_urls[0]}")
+		with open(f'videos/{user.id}.mp4','wb') as f:
+			f.write(data.content)
+		await send_video(user,viewers,username,description)
+	else:
+		await bot.send_message(user.id,'Invalid URL.')
+
+
+executor.start_polling(dp,skip_updates=True)
