@@ -2,6 +2,11 @@ import aiogram
 import logging
 from aiogram import Bot, Dispatcher, executor, types
 
+from aiogram.utils.executor import start_webhook
+from bot.settings import (HEROKU_APP_NAME,
+						  WEBHOOK_URL, WEBHOOK_PATH,
+						  WEBAPP_HOST, WEBAPP_PORT)
+
 import requests as r
 import re
 import os
@@ -16,6 +21,12 @@ logging.basicConfig(level=logging.INFO)
 
 bot = Bot(API_TOKEN)
 dp = Dispatcher(bot)
+
+
+async def on_startup(dp):
+	logging.warning(
+		'Starting connection. ')
+	await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
 
 def is_valid(url):
 	req = r.get(url)
@@ -89,4 +100,12 @@ async def inline_echo(inline_query: types.InlineQuery):
 		await bot.send_message(user.id,'Invalid URL.')
 
 
-executor.start_polling(dp,skip_updates=True)
+if __name__ == '__main__':
+	start_webhook(
+		dispatcher=dp,
+		webhook_path=WEBHOOK_PATH,
+		skip_updates=True,
+		on_startup=on_startup,
+		host=WEBAPP_HOST,
+		port=WEBAPP_PORT,
+	)
