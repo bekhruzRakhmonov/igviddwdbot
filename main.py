@@ -73,7 +73,7 @@ async def inline_echo(inline_query: types.InlineQuery):
 	user = inline_query.from_user
 	video_url = inline_query.query.replace("\\","")
 	if is_valid(video_url):
-		await bot.send_message(user.id,'Yuborilmoqda...')
+		await bot.send_message(user.id,'Sending...')
 		text = r.get(f"{inline_query.query}").text
 		response = re.findall('"video_url":"([^"]+)"',text)
 		viewers = re.findall('"video_view_count":([^"]+)',text)

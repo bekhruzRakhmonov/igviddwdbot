@@ -1,2 +1,4 @@
 aiogram==2.16
+aiohttp
+aiodns
 requests==2.25.1
