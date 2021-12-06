@@ -1,2 +1,2 @@
 worker: python main.py
-web: python main.py 0.0.0.0:37138
+web: python main.py 0.0.0.0
