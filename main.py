@@ -56,11 +56,11 @@ async def get_url(message):
 	print(message.text)
 	if is_valid(message.text):
 		await bot.send_message(user.id,'Sending...')
-		text =  await r.get(f"{message.text}").text
-		response = re.findall('"video_url":"([^"]+)"',text)
-		username = re.findall('"full_name":"([^"]+)"', text)
-		description = re.findall('"text":"([^"]+)"', text)
-		viewers = re.findall('"video_view_count":([^"]+)',text)
+		text =  await r.get(f"{message.text}")
+		response = re.findall('"video_url":"([^"]+)"',text.text)
+		username = re.findall('"full_name":"([^"]+)"', text.text)
+		description = re.findall('"text":"([^"]+)"', text.text)
+		viewers = re.findall('"video_view_count":([^"]+)',text.text)
 		vid_urls = prepare_urls(response)
 		print(vid_urls)
 		data = r.get(f"{vid_urls[0]}")
