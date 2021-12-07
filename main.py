@@ -53,6 +53,7 @@ def prepare_urls(matches):
 @dp.message_handler(content_types=['text'])
 async def get_url(message):
 	user = message.from_user
+	print(message.text)
 	if is_valid(message.text):
 		await bot.send_message(user.id,'Sending...')
 		text =  r.get(f"{message.text}").text
