@@ -27,7 +27,7 @@ async def on_startup(dp):
 
 def is_valid(url):
 	req = r.get(f'{url}')
-	if re.match(r"https://www.instagram.com/tv/",url) or re.match(r"https://www.instagram.com/p/",url) and req.status_code == 200:
+	if (re.match(r"https://www.instagram.com/tv/",url) or re.match(r"https://www.instagram.com/p/",url)) and req.status_code == 200:
 		return True
 	else:
 		return False
