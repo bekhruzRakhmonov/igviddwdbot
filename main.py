@@ -55,17 +55,17 @@ async def get_url(message):
 	user = message.from_user
 	if is_valid(message.text):
 		await bot.send_message(user.id,'Sending...')
-		text = r.get(f"{message.text}").text
-		response = re.findall('"video_url":"([^"]+)"',text)
-		username = re.findall('"full_name":"([^"]+)"', text)
-		description = re.findall('"text":"([^"]+)"', text)
-		viewers = re.findall('"video_view_count":([^"]+)',text)
-		vid_urls = prepare_urls(response)
-		print(vid_urls)
-		data = r.get(f"{vid_urls[0]}")
-		with open(f'videos/{message.from_user.id}.mp4','wb') as f:
-			f.write(data.content)
-		await send_video(user,viewers,username,description)
+		async with r.get(f"{message.text}").text as text:
+			response = re.findall('"video_url":"([^"]+)"',text)
+			username = re.findall('"full_name":"([^"]+)"', text)
+			description = re.findall('"text":"([^"]+)"', text)
+			viewers = re.findall('"video_view_count":([^"]+)',text)
+			vid_urls = prepare_urls(response)
+			print(vid_urls)
+			data = r.get(f"{vid_urls[0]}")
+			with open(f'videos/{message.from_user.id}.mp4','wb') as f:
+				f.write(data.content)
+			await send_video(user,viewers,username,description)
 	else:
 		await bot.send_message(user.id,'Invalid url.')
 
