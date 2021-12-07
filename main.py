@@ -61,6 +61,7 @@ async def get_url(message):
 		description = re.findall('"text":"([^"]+)"', text)
 		viewers = re.findall('"video_view_count":([^"]+)',text)
 		vid_urls = prepare_urls(response)
+		print(vid_urls)
 		data = r.get(f"{vid_urls[0]}")
 		with open(f'videos/{message.from_user.id}.mp4','wb') as f:
 			f.write(data.content)
