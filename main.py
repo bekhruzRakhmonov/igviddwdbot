@@ -50,10 +50,11 @@ async def get_url(message: types.Message):
 		await bot.send_message(user.id,'Invalid URL.')
 
 if __name__ == '__main__':
-	start_webhook(dispatcher=dp,
+	executor.start_polling(dp,skip_updates=True)
+	'''start_webhook(dispatcher=dp,
 		webhook_path=WEBHOOK_PATH,
 		skip_updates=True,
 		on_startup=on_startup,
 		host=WEBAPP_HOST,
 		port=WEBAPP_PORT,
-	)
+	)'''
