@@ -4,7 +4,7 @@ from aiogram.utils.executor import start_webhook
 from db_helper import DBHelper
 from inline_handler import inline_echo
 from checking import is_valid,prepare_urls,send_video
-import requests as r
+import requests
 import re
 import os
 import logging
@@ -36,14 +36,14 @@ async def get_url(message: types.Message):
 	user = message.from_user
 	if is_valid(message.text):
 		await bot.send_message(user.id,'Sending...')
-		text =  r.get(f"{message.text}").text
+		text =  requests.get(f"{message.text}").text
 		response = re.findall('"video_url":"([^"]+)"',text)
 		username = re.findall('"full_name":"([^"]+)"', text)
 		description = re.findall('"text":"([^"]+)"', text)
 		viewers = re.findall('"video_view_count":([^"]+)',text)
 		vid_urls = prepare_urls(response)
 		print(vid_urls)
-		vid_ct = r.get(f"{vid_urls[0]}")
+		vid_ct = requests.get(f"{vid_urls[0]}")
 		with open(f'videos/{message.from_user.id}.mp4','wb') as f:
 			f.write(vid_ct.content)
 		await send_video(user,viewers,username,description)

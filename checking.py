@@ -1,5 +1,5 @@
 from config import bot,dp
-import requests as r
+import requests
 import re
 import os
 import cgitb
@@ -9,7 +9,7 @@ cgitb.enable()
 
 def is_valid(url):
 	if re.match(r"https://www.instagram.com/tv/",url) or re.match(r"https://www.instagram.com/p/",url) or re.match(r"https://www.instagram.com/reel/",url):
-		req = r.get(url)
+		req = requests.get(url)
 		if req.status_code == 200:
 			return True
 	else:
