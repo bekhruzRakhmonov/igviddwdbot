@@ -7,6 +7,7 @@ from checking import is_valid,prepare_urls,send_video
 import requests as r
 import re
 import os
+import logging
 from settings import (BOT_TOKEN,HEROKU_APP_NAME,WEBHOOK_URL, WEBHOOK_PATH,WEBAPP_HOST, WEBAPP_PORT)
 
 
