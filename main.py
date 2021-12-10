@@ -8,15 +8,15 @@ import requests
 import re
 import os
 import logging
-from settings import (BOT_TOKEN,HEROKU_APP_NAME,WEBHOOK_URL, WEBHOOK_PATH,WEBAPP_HOST, WEBAPP_PORT)
+# from settings import (BOT_TOKEN,HEROKU_APP_NAME,WEBHOOK_URL, WEBHOOK_PATH,WEBAPP_HOST, WEBAPP_PORT)
 
 
-async def on_startup(dp):
+'''async def on_startup(dp):
 	logging.warning(
 		'Starting connection. ')
-	await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
+	await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)'''
 
-@dp.message_handler(commands=['hechkimbilmidi'])
+@dp.message_handler(commands=['secretuserscount'])
 async def send_users_count(message: types.Message):
 	db = DBHelper(message.from_user.id)
 	users_count = db.get_users_count()
@@ -35,7 +35,7 @@ async def start_message(message: types.Message):
 async def get_url(message: types.Message):
 	user = message.from_user
 	if is_valid(message.text):
-		await bot.answer(user.id,'Sending...')
+		await bot.send_message(user.id,'Sending...')
 		text =  requests.get(f"{message.text}").text
 		response = re.findall('"video_url":"([^"]+)"',text)
 		username = re.findall('"full_name":"([^"]+)"', text)

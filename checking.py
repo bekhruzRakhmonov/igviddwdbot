@@ -3,15 +3,17 @@ import requests
 import re
 import os
 import cgitb
+from urllib.parse import urlparse
 
 # show detailed errors
 cgitb.enable()
 
 def is_valid(url):
-	if re.match(r"https://www.instagram.com/tv/",url) or re.match(r"https://www.instagram.com/p/",url) or re.match(r"https://www.instagram.com/reel/",url):
-		req = requests.get(url)
-		if req.status_code == 200:
-			return True
+	path = urlparse(url).path
+	prepared_url = f"https://www.instagram.com/{path}"
+	req = requests.get(prepared_url)
+	if req.status_code == 200:
+		return True
 	else:
 		return False
 

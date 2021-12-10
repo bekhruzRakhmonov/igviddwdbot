@@ -9,7 +9,7 @@ async def inline_echo(inline_query):
 	user = inline_query.from_user
 	video_url = inline_query.query.replace("\\","")
 	if is_valid(video_url):
-		await bot.answer(user.id,'Sending...')
+		await bot.send_message(user.id,'Sending...')
 		text = requests.get(f"{inline_query.query}").text
 		response = re.findall('"video_url":"([^"]+)"',text)
 		viewers = re.findall('"video_view_count":([^"]+)',text)
@@ -29,4 +29,4 @@ async def inline_echo(inline_query):
 			f.write(vid_ct.content)
 		await send_video(user,viewers,username,description)
 	else:
-		await bot.answer(user.id,'Invalid URL.')
+		await bot.send_message(user.id,'Invalid URL.')
