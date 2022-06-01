@@ -17,3 +17,26 @@ WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 # webserver settings
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = int(os.getenv('PORT'))
+
+
+# https://stackoverflow.com/questions/43452544/what-is-https-i-instagram-com-api-v1
+# https://github.com/ohld/igbot
+# https://instagram.api-docs.io/1.0/media/JQFw3CS3GKfLs2ukL
+
+# from settings import (BOT_TOKEN,HEROKU_APP_NAME,WEBHOOK_URL, WEBHOOK_PATH,WEBAPP_HOST, WEBAPP_PORT)
+
+
+async def on_startup(dp):
+    logging.warning(
+        'Starting connection. ')
+    await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
+
+if __name__ == '__main__':
+    executor.start_polling(dp,skip_updates=True)
+    '''start_webhook(dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        skip_updates=True,
+        on_startup=on_startup,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
+    )'''

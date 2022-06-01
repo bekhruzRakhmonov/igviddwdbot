@@ -1,2 +1,6 @@
 __pycache__/
 .env
+requests/
+videos/
+settings.py
+url.py
