@@ -48,7 +48,7 @@ async def download_video(message,gen_content,size,content):
                 break
 
         with open(f'videos/{message.from_user.id}.mp4','wb') as f:
-            f.write(stx)
+            f.write(ctx)
     else:
         with open(f'videos/{message.from_user.id}.mp4','wb') as f:
             f.write(content)
