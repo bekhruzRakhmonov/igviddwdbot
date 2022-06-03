@@ -17,12 +17,16 @@ def is_valid(url: str):
 	else:
 		return False
 
-def prepare_urls(matches):
+async def prepare_urls(matches):
 	return list({match.replace("\\u0026", "&") for match in matches})
 
-async def send_video(user,viewers,username,description):
-	await bot.send_video(user.id,open(f'videos/{user.id}.mp4','rb'),caption="<i>@igviddwdbot</i>",parse_mode='HTML')
-	await delete_video(user)
+async def send_video(user,username=None):
+	try:
+		await bot.send_video(user.id,open(f'videos/{user.id}.mp4','rb'),caption="<i>@igviddwdbot</i>",parse_mode='HTML')
+		await delete_video(user)
+	except Exception as e:
+		print(e,dir(e))
+		await bot.send_message(user.id,e)
 
 async def delete_video(user):
 	if os.path.exists(f"videos/{user.id}.mp4"):

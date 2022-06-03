@@ -15,6 +15,6 @@ class DBHelper:
 	def add_user(self):
 		return cursor.execute("INSERT INTO users(user_id) VALUES ({})".format(self.user))
 	def get_users_count(self):
-		return cursor.execute("SELECT id FROM users")
+		return cursor.execute("SELECT id FROM users").fetchall()
 	def commit(self):
 		return conn.commit()
