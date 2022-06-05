@@ -1,20 +1,25 @@
 import sqlite3 as sqlt
+import pymongo
+import os
 
-conn = sqlt.connect('db.db',check_same_thread=False)
-cursor = conn.cursor()
 
-class DBHelper:
-	def __init__(self,user):
-		self.user = user
-	def create_db(self):
-		return cursor.execute("CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY,user_id text NOT NULL);")
+PASSWORD = os.getenv("PASSWORD")
 
-	def check_user(self):
-		return cursor.execute("SELECT * FROM users WHERE user_id='{}'".format(self.user)).fetchone()
+myclient = pymongo.MongoClient(f"mongodb+srv://bexruz:{PASSWORD}@cluster0.pedffq8.mongodb.net/?retryWrites=true&w=majority")
+mydb = myclient["igviddwdbot"]
+mycol = mydb["users"]
 
-	def add_user(self):
-		return cursor.execute("INSERT INTO users(user_id) VALUES ({})".format(self.user))
-	def get_users_count(self):
-		return cursor.execute("SELECT id FROM users").fetchall()
-	def commit(self):
-		return conn.commit()
+def add_user(user_id):
+	mydict = {"user_id": user_id}
+	mydoc = mycol.insert_one(mydict)
+	return mydoc
+
+def get_user(user_id):
+	myquery = { "user_id": user_id }
+	mydoc = mycol.find(myquery)
+	doc = [doc for doc in mydoc]
+	return doc
+
+def get_users_count():
+	users = [user for user in mycol.find()]
+	return len(users)

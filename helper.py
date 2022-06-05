@@ -2,12 +2,12 @@ from config import bot,dp
 import requests as r
 import re
 import os
-import cgitb
 from urllib.parse import urlparse
 import asyncio
+import logging
 
-# show detailed errors
-cgitb.enable()
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger(__name__)
 
 def is_valid(url: str):
 	if re.match(r"https://www.instagram.com/tv/",url) or re.match(r"https://www.instagram.com/p/",url) or re.match(r"https://www.instagram.com/reel/",url) :
@@ -20,17 +20,16 @@ def is_valid(url: str):
 async def prepare_urls(matches):
 	return list({match.replace("\\u0026", "&") for match in matches})
 
-async def send_video(user,username=None):
+async def send_video(user_id):
 	try:
-		await bot.send_video(user.id,open(f'videos/{user.id}.mp4','rb'),caption="<i>@igviddwdbot</i>",parse_mode='HTML')
-		await delete_video(user)
+		await bot.send_video(user_id,open(f'videos/{user_id}.mp4','rb'),caption="<i>@igviddwdbot</i>",parse_mode='HTML')
+		await delete_video(user_id)
 	except Exception as e:
-		print(e,dir(e))
-		await bot.send_message(user.id,e)
+		logger.warning(e)
 
-async def delete_video(user):
-	if os.path.exists(f"videos/{user.id}.mp4"):
-		os.remove(f"videos/{user.id}.mp4")
+async def delete_video(user_id):
+	if os.path.exists(f"videos/{user_id}.mp4"):
+		os.remove(f"videos/{user_id}.mp4")
 
 async def normalize_url(url: str):
 	uri = urlparse(url)
