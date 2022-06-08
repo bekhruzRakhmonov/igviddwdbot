@@ -2,7 +2,6 @@ import sqlite3 as sqlt
 import pymongo
 import os
 
-
 PASSWORD = os.getenv("PASSWORD")
 
 myclient = pymongo.MongoClient(f"mongodb+srv://bexruz:{PASSWORD}@cluster0.pedffq8.mongodb.net/?retryWrites=true&w=majority")
