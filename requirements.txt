@@ -1,6 +1,1 @@
-aiogram==2.16
-aiohttp==3.8.1
-aiosignal==1.2.0
-requests
-pymongo
-dnspython
+Defaulting to user installation because normal site-packages is not writeable

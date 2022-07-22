@@ -19,6 +19,6 @@ def get_user(user_id):
 	doc = [doc for doc in mydoc]
 	return doc
 
-def get_users_count():
+def get_users():
 	users = [user for user in mycol.find()]
-	return len(users)
+	return users
