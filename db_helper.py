@@ -1,4 +1,3 @@
-import sqlite3 as sqlt
 import pymongo
 import os
 
