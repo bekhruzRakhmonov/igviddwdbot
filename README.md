@@ -1,13 +1,13 @@
-# igdwdbot
-## It is telegram bot project helps to download instagram videos
+## igdwdbot
+### It is telegram bot project helps to download instagram videos
 
-# Install
+## Install
 
 `
   pip install -r requirements.txt
 `
 
-# Run
+## Run
 
 `
   python3 main.py
